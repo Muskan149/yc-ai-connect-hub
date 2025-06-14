@@ -132,6 +132,7 @@ const Profile: React.FC = () => {
           </div>
 
           {/* Interests */}
+          { profile.interests.length > 0 && (
           <div className="mb-8">
             <span className="flex items-center mb-2">              
               {/* <SmilePlus className="w-5 h-5 mr-3 text-yc-orange" /> */}
@@ -142,9 +143,10 @@ const Profile: React.FC = () => {
                 <Badge key={index} variant="secondary" className="text-sm px-3 py-1 bg-yc-orange text-white">
                   {interest}
                 </Badge>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Looking For */}
           <div className="mb-8">
