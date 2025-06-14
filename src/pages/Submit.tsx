@@ -666,7 +666,7 @@ const AttendeeForm = () => {
         {/* Additional Info */}
         <div className="mt-8 text-center text-sm text-gray-500">
           <p>
-            Your profile will be reviewed and added to the roster within 24 hours. 
+            Your profile will be reviewed and added to the roster <b>within 24 hours</b>. 
             We'll notify you via email when it goes live.
           </p>
           <p className="mt-2 font-medium text-yc-orange">
