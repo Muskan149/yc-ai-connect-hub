@@ -173,7 +173,7 @@ export const ProfileCard = (profile : ProfileCardProps) => {
           <Button 
             size="sm" 
             className="bg-yc-orange hover:bg-yc-orange-dark text-white"
-            onClick={() => window.open(`/profile/${profile.id}`, '_blank')}
+            onClick={() => navigate(`/profile/${profile.id}`)}
           >
             View Profile
           </Button>
