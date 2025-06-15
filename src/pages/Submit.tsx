@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { submitProfile, Profile } from "@/lib/supabase/uploadProfile";
+import { useProfileSubmission } from "@/hooks/useProfileSubmission";
 import { uploadImage } from "@/lib/supabase/uploadFile";
 import { useNavigate } from "react-router-dom";
 import Logo from "@/components/Logo";
@@ -22,7 +22,7 @@ import {
 const AttendeeForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isSubmitting, handleSubmit } = useProfileSubmission();
   const [formData, setFormData] = useState({
     name: "",
     school: "",
@@ -136,80 +136,10 @@ const AttendeeForm = () => {
     setAcceptanceEmailPreview(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Basic validation
-    if (!formData.name || !formData.school || !formData.location || !formData.experience || !formData.lookingFor || !formData.email || !formData.acceptanceEmail) {
-      toast({
-        title: "Missing required fields",
-        description: "Please fill in all required fields to submit your profile.",
-        variant: "destructive"
-      });
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Upload data to supabase
-    try {
-      // Upload files if they exist
-      let imageUrl = null;
-      let acceptanceEmailUrl = null;
-
-      if (formData.image) {
-        console.log("File type for profile pic: " + formData.image.type)
-        const { publicUrl } = await uploadImage(formData.image)
-        console.log("Public URL for profile pic: " + publicUrl)
-        imageUrl = publicUrl
-      }
-
-      if (formData.acceptanceEmail) {
-        console.log("File type for acceptance email " + formData.acceptanceEmail.type)
-        const { publicUrl } = await uploadImage(formData.acceptanceEmail)
-        console.log("Public URL for acceptance email: " + publicUrl)
-        acceptanceEmailUrl = publicUrl
-      }
-
-      // Prepare profile data
-      const profileData: Profile = {
-        name: formData.name,
-        school: formData.school,
-        location: formData.location,
-        experience: formData.experience,
-        interests: formData.interests,
-        looking_for: formData.lookingFor,
-        linkedin: formData.linkedin,
-        portfolio: formData.portfolio,
-        support: formData.support,
-        instagram: formData.instagram,
-        twitter: formData.twitter,
-        discord: formData.discord,
-        email: formData.email,
-        image: imageUrl || "https://zrqneqpcnphxsugbprwj.supabase.co/storage/v1/object/public/screenshots//buzzbazaar_logo.png",
-        acceptance_email: acceptanceEmailUrl || "https://zrqneqpcnphxsugbprwj.supabase.co/storage/v1/object/public/screenshots//buzzbazaar_logo.png"
-      };
-
-      // Submit profile to database
-      const { data, error } = await submitProfile(profileData);
-      if (error) {
-        console.error("Error submitting profile: " + error.details)
-        toast({
-          title: "Error submitting profile",
-          description: "There was an error submitting your profile. Please try again.",
-          variant: "destructive"
-        });
-        setIsSubmitting(false);
-        return;
-      } else {
-        toast({
-        title: "Profile submitted successfully!",
-        description: "Your profile has been added to the roster. You'll be notified when it goes live.",
-        variant: "default"
-      }) 
-      navigate("/");
-    };
-
+    const data = await handleSubmit(formData);
+    if (data) {
       // Reset form
       setFormData({
         name: "",
@@ -230,16 +160,9 @@ const AttendeeForm = () => {
       });
       setImagePreview(null);
       setAcceptanceEmailPreview(null);
-    } catch (error) {
-      console.error('Error submitting profile:', error.message);
-      toast({
-        title: "Error submitting profile",
-        description: "There was an error submitting your profile. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
+      setNewInterest("");
     }
+    console.log("Data returned after submitting profile: ", data);
   };
 
   return (
@@ -273,7 +196,7 @@ const AttendeeForm = () => {
             <CardTitle className="text-xl font-semibold">Your Profile Information</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={onSubmit} className="space-y-6">
               {/* Basic Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -526,7 +449,7 @@ const AttendeeForm = () => {
                   )}
                 </div>
                 <p className="text-sm text-gray-500 mt-1">
-                  Add tags for your areas of interest and expertise. This will help others discover you.
+                  Press enter to add an interest. Add tags for your areas of interest and expertise. This will help others discover you.
                 </p>
               </div>
 

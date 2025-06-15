@@ -19,18 +19,18 @@ export interface Profile {
 }
 
 export async function submitProfile(profile: Profile) {
-  const { data, error } = await supabase
+  const response= await supabase
     .from('attendees')
     .insert([profile])
     .select()
     .single()
 
-  if (error) {
-    console.error("Error submitting profile: " + error.details)
-    throw error
+  if (response.error) {
+    console.error("Error submitting profile to supabase: " + response.error.details)
+    throw response.error
   }
-
-  return data
+  console.log("Data returned after submitting profile: ", response.data);
+  return response.data
 }
 
 // export async function uploadFile(file: File, bucket: string, folder: string) {

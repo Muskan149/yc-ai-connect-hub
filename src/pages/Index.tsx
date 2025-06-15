@@ -8,100 +8,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ProfileCard } from "@/components/ProfileCard";
 import { fetchAttendees } from "@/lib/supabase/fetchAttendees";
 import Logo from "@/components/Logo";
+import { Checkbox } from "@/components/ui/checkbox";
 
-// // Dummy profile data
-// const dummyProfiles = [
-//   {
-//     id: 1,
-//     name: "Sarah Chen",
-//     school: "Stanford CS",
-//     location: "San Francisco, CA",
-//     experience: "Built robotics LLMs at Meta AI, now exploring climate tech applications",
-//     interests: ["Climate Tech", "Robotics", "LLMs", "Computer Vision"],
-//     lookingFor: "Co-founder for climate + AI startup. Looking for someone with domain expertise in renewable energy or carbon capture.",
-//     support: "I'm looking for a co-founder to build a climate + AI startup. I'm looking for someone with domain expertise in renewable energy or carbon capture.",
-//     linkedin: "https://linkedin.com/in/sarahchen",
-//     portfolio: "https://sarahchen.dev",
-//     instagram: "https://instagram.com/sarahchen",
-//     discord: "https://discord.com/sarahchen",
-//     twitter: "https://twitter.com/sarahchen"
-//   },
-//   {
-//     id: 2,
-//     name: "Marcus Rodriguez",
-//     school: "MIT EECS",
-//     location: "Boston, MA",
-//     experience: "Lead AI Engineer at Anthropic, 3 years in conversational AI",
-//     interests: ["NLP", "AI Safety", "Developer Tools", "Education"],
-//     lookingFor: "Technical co-founder to build AI-powered educational tools. Open to relocating to SF.",
-//     support: "I'm looking for a technical co-founder to build AI-powered educational tools. Open to relocating to SF.",
-//     linkedin: "https://linkedin.com/in/marcusrodriguez",
-//     portfolio: null,
-//     instagram: "https://instagram.com/marcusrodriguez",
-//     discord: "https://discord.com/marcusrodriguez",
-//     twitter: "https://twitter.com/marcusrodriguez"
-//   },
-//   {
-//     id: 3,
-//     name: "Priya Patel",
-//     school: "UC Berkeley Haas",
-//     location: "Oakland, CA",
-//     experience: "Product Manager at OpenAI, previously consultant at McKinsey",
-//     interests: ["FinTech", "AI Ethics", "Product Strategy", "Healthcare"],
-//     lookingFor: "Looking for technical co-founder to build AI-powered financial planning tools for underserved communities.",
-//     support: "I'm looking for a technical co-founder to build AI-powered financial planning tools for underserved communities.",
-//     linkedin: "https://linkedin.com/in/priyapatel",
-//     portfolio: "https://priyapatel.com",
-//     instagram: "https://instagram.com/priyapatel",
-//     discord: "https://discord.com/priyapatel",
-//     twitter: "https://twitter.com/priyapatel"
-//   },
-//   {
-//     id: 4,
-//     name: "David Kim",
-//     school: "Carnegie Mellon CS",
-//     location: "Pittsburgh, PA",
-//     experience: "Senior ML Engineer at Google DeepMind, expertise in reinforcement learning",
-//     interests: ["Gaming", "RL", "Simulation", "VR/AR"],
-//     lookingFor: "Co-founder for AI-powered game development tools. Want to democratize game creation.",
-//     support: "I'm looking for a co-founder to build AI-powered game development tools. Want to democratize game creation.",
-//     linkedin: "https://linkedin.com/in/davidkim",
-//     portfolio: "https://davidkim.ai",
-//     instagram: "https://instagram.com/davidkim",
-//     discord: "https://discord.com/davidkim",
-//     twitter: "https://twitter.com/davidkim"
-//   },
-//   {
-//     id: 5,
-//     name: "Elena Vasquez",
-//     school: "Harvard Business School",
-//     location: "Cambridge, MA",
-//     experience: "VP of Growth at Stripe, previously founded a YC-backed fintech startup",
-//     interests: ["B2B SaaS", "AI Automation", "Sales Tech", "Marketing"],
-//     lookingFor: "Technical co-founder to build AI sales automation platform. Have strong distribution channels ready.",
-//     support: "I'm looking for a technical co-founder to build AI sales automation platform. Have strong distribution channels ready.",
-//     linkedin: "https://linkedin.com/in/elenavasquez",
-//     portfolio: null,
-//     instagram: "https://instagram.com/elenavasquez",
-//     discord: "https://discord.com/elenavasquez",
-//     twitter: "https://twitter.com/elenavasquez"
-//   },
-//   {
-//     id: 6,
-//     name: "Alex Thompson",
-//     school: "Georgia Tech CS",
-//     location: "Atlanta, GA",
-//     experience: "Founding Engineer at Hugging Face, expert in open-source AI models",
-//     interests: ["Open Source", "Model Training", "DevOps", "MLOps"],
-//     lookingFor: "Business co-founder to commercialize open-source AI infrastructure tools. Revenue already at $10k MRR.",
-//     support: "I'm looking for a business co-founder to commercialize open-source AI infrastructure tools. Revenue already at $10k MRR.",
-//     linkedin: "https://linkedin.com/in/alexthompson",
-//     portfolio: "https://alexthompson.dev",
-//     instagram: "https://instagram.com/alexthompson",
-//     discord: "https://discord.com/alexthompson",
-//     twitter: "https://twitter.com/alexthompson"
-//   }
-// ];
+const BACKEND_URL = "http://localhost:8000";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -109,6 +18,8 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filteredProfiles, setFilteredProfiles] = useState([]);
+  // const [filteredAdvancedProfiles, setFilteredAdvancedProfiles] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   // Fetch attendees using useEffect
   useEffect(() => {
@@ -128,14 +39,35 @@ const Index = () => {
     loadProfiles();
   }, []);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!searchQuery.trim()) {
+        // setIsSearching(false);
+      setSearchQuery("");
       setFilteredProfiles(profiles);
+      // setFilteredAdvancedProfiles([]);
       return;
     }
+    
+    setIsSearching(true);
+    // Make a call to the backend to fetch the top k profiles
+    const response = await fetch(`${BACKEND_URL}/fetch_top_k_profiles`, {
+      method: "POST",
+      body: JSON.stringify({ query: searchQuery }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+ 
+    const data = await response.json();
+    console.log("Data returned after fetching top k profiles: ", data);
 
-    // Simple search implementation - in production this would be more sophisticated
-    const filtered = profiles.filter(profile => 
+    // Get semantic search results
+    const semanticProfileIds = data.results;
+    console.log("Semantic profile ids: ", semanticProfileIds);
+    const semanticResults = profiles.filter(profile => semanticProfileIds.includes(profile.id));
+
+    // Simple keyword search implementation
+    const keywordResults = profiles.filter(profile => 
       profile.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       profile.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
       profile.experience.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -144,7 +76,19 @@ const Index = () => {
       profile.school.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    setFilteredProfiles(filtered);
+    // Combine results and remove duplicates using Set
+    const combinedResults = [...semanticResults, ...keywordResults];
+    const uniqueProfileIds = new Set();
+    const hybridResults = combinedResults.filter(profile => {
+      if (uniqueProfileIds.has(profile.id)) {
+        return false;
+      }
+      uniqueProfileIds.add(profile.id);
+      return true;
+    });
+
+    setFilteredProfiles(hybridResults);
+    // setFilteredAdvancedProfiles(semanticResults);
   };
 
   if (isLoading) {
@@ -228,10 +172,10 @@ const Index = () => {
               <div className="relative shadow-lg rounded-xl">
                 <Input
                   type="text"
-                  placeholder="Try: 'Agentic AI' or 'Based in San Francisco' or 'Stanford CS'"
+                  placeholder="Try: 'Agents' or 'Based in San Francisco' or 'Stanford CS'"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                   className="w-full pl-12 pr-4 py-5 text-lg border-2 border-yc-orange rounded-xl focus-visible:ring-2 focus-visible:ring-yc-orange focus-visible:ring-offset-2"
                 />
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -252,21 +196,33 @@ const Index = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8 flex justify-between items-center">
           <h2 className="text-2xl font-semibold text-gray-900">
-            {searchQuery ? `Search Results (${filteredProfiles.length})` : `All Profiles (${filteredProfiles.length})`}
+            {searchQuery && isSearching ? `Search Results (${filteredProfiles.length})` : `All Profiles`}
           </h2>
-          {searchQuery && (
+          {searchQuery && isSearching && (
             <Button 
               variant="outline" 
               onClick={() => {
                 setSearchQuery("");
                 setFilteredProfiles(profiles);
+                // setFilteredAdvancedProfiles([]);
+                setIsSearching(false);
               }}
-              className="text-sm"
+              className="text-sm border-yc-orange"
             >
               Clear search
             </Button>
           )}
         </div>
+
+        {/* a row of filtering checkboxes with names "Is Hiring", "Looking for Co-founders", "Looking for Job🥀" */}
+        {/* <div className="flex flex-row gap-4 mb-4">
+          <Checkbox id="is-hiring" />
+          <label htmlFor="is-hiring">Is Hiring</label>
+          <Checkbox id="looking-for-co-founders" />
+          <label htmlFor="looking-for-co-founders">Looking for Co-founders</label>
+          <Checkbox id="looking-for-job" /> 
+          <label htmlFor="looking-for-job">Looking for Job🥀</label>
+        </div> */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProfiles.map((profile) => (
