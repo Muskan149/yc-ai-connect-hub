@@ -51,7 +51,15 @@ async def perform_index_profile(request: Request):
         print(f"Error indexing profile: {str(e)}")
         return {"message": f"Error indexing profile: {str(e)}", "success": False}
 
+
 if __name__ == "__main__":
     import uvicorn
+    # Railway provides PORT environment variable
     port = int(os.environ.get("PORT", 8000))
+    print(f"Starting server on port {port}")
     uvicorn.run(app, host="0.0.0.0", port=port)
+else:
+    # For Railway deployment, also expose at module level
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    print(f"Module level - Starting server on port {port}")
