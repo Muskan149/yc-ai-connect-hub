@@ -13,7 +13,9 @@ app = FastAPI()
 # CORS to allow frontend requests (change "*" to your frontend URL in prod)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080", "https://yc-sus-roster.vercel.app/"],
+    allow_origins=["http://localhost:8080", 
+                   "https://yc-sus-roster.vercel.app", 
+                   "https://yc-sus-roster.vercel.app/*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
