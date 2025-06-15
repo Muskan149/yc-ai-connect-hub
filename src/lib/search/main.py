@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from create_embeddings import fetch_top_k_profiles, index_profile
 from pydantic import BaseModel
 from typing import Dict, Any
+import os
 
 class ProfileResponse(BaseModel):
     message: str

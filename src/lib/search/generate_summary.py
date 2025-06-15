@@ -25,7 +25,8 @@ def generate_profile_summary(
     
     # Construct the prompt
     prompt = f"""
-Below is a profile of an attendee. Write a friendly, concise 75–100 word summary of them that could help someone get a sense of who they are, their interests, what they can help with, what they're looking for. Be structured and don't miss key details.
+Below is a profile of an attendee. Write a concise 75–100 word summary of them that could help someone get a sense of who they are, their interests, what they can help with, what they're looking for. 
+Be structured and include all the key details given in the below profile.
 {format_profile(profile)}
 Summary:
 """
@@ -34,7 +35,7 @@ Summary:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant that creates friendly, concise profile summaries."},
+                {"role": "system", "content": "You are a helpful assistant that creates friendly profile summaries."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=200,
@@ -63,5 +64,5 @@ if __name__ == "__main__":
         "portfolio": "https://johndoe.com"
     }
     
-    summary = generate_profile_summary(**profile_data)
+    summary = generate_profile_summary(profile_data)
     print(summary)

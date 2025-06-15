@@ -402,6 +402,7 @@ const AttendeeForm = () => {
               {/* Interests */}
               <div>
                 <Label className="text-sm font-medium text-gray-700">Interests & Expertise</Label>
+                <span className="text-sm text-gray-500 mt-1"> Press enter to add an interest</span>
                 <div className="mt-1 space-y-3">
                   <div className="flex gap-2">
                     <Input
@@ -449,7 +450,7 @@ const AttendeeForm = () => {
                   )}
                 </div>
                 <p className="text-sm text-gray-500 mt-1">
-                  Press enter to add an interest. Add tags for your areas of interest and expertise. This will help others discover you.
+                  Add tags for your areas of interest and expertise. This will help others discover you.
                 </p>
               </div>
 
