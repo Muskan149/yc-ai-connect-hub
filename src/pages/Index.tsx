@@ -10,7 +10,7 @@ import { fetchAttendees } from "@/lib/supabase/fetchAttendees";
 import Logo from "@/components/Logo";
 import { Checkbox } from "@/components/ui/checkbox";
 
-const BACKEND_URL = "https://fastapi-backend-production-7f9b.up.railway.app";
+const BACKEND_URL = "https://fastapi-backend-v6vr.onrender.com";
 // const BACKEND_URL = "http://localhost:8000";
 
 
