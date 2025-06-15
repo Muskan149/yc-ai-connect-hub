@@ -4,7 +4,9 @@ import { useToast } from "@/hooks/use-toast";
 import { submitProfile, Profile } from "@/lib/supabase/uploadProfile";
 import { uploadImage } from "@/lib/supabase/uploadFile";
 
-const BACKEND_URL = "https://fastapi-backend-production-7f9b.up.railway.app";
+
+// const BACKEND_URL = "https://fastapi-backend-production-7f9b.up.railway.app";
+const BACKEND_URL = "http://localhost:8000";
 
 interface FormData {
   name: string;

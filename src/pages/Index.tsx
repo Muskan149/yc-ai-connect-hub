@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Search, Plus, MapPin, Briefcase, Heart, ExternalLink } from "lucide-react";
+import { Search, Plus, MapPin, Briefcase, Heart, ExternalLink, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +10,9 @@ import { fetchAttendees } from "@/lib/supabase/fetchAttendees";
 import Logo from "@/components/Logo";
 import { Checkbox } from "@/components/ui/checkbox";
 
-const BACKEND_URL = "https://fastapi-backend-production-7f9b.up.railway.app";
+// const BACKEND_URL = "https://fastapi-backend-production-7f9b.up.railway.app";
+const BACKEND_URL = "http://localhost:8000";
+
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -88,6 +90,7 @@ const Index = () => {
     });
 
     setFilteredProfiles(hybridResults);
+    setIsSearching(searchQuery.trim() !== "");  // Keep isSearching true if there's a search query
     // setFilteredAdvancedProfiles(semanticResults);
   };
 
@@ -183,6 +186,7 @@ const Index = () => {
                   onClick={handleSearch}
                   className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-yc-orange hover:bg-yc-orange-dark rounded-lg"
                   size="lg"
+                  disabled={isSearching}
                 >
                   Search
                 </Button>
@@ -204,7 +208,6 @@ const Index = () => {
               onClick={() => {
                 setSearchQuery("");
                 setFilteredProfiles(profiles);
-                // setFilteredAdvancedProfiles([]);
                 setIsSearching(false);
               }}
               className="text-sm border-yc-orange"
@@ -213,24 +216,15 @@ const Index = () => {
             </Button>
           )}
         </div>
+        
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProfiles.map((profile) => (
+              <ProfileCard key={profile.id} {...profile} />
+            ))}
+          </div>
 
-        {/* a row of filtering checkboxes with names "Is Hiring", "Looking for Co-founders", "Looking for Job🥀" */}
-        {/* <div className="flex flex-row gap-4 mb-4">
-          <Checkbox id="is-hiring" />
-          <label htmlFor="is-hiring">Is Hiring</label>
-          <Checkbox id="looking-for-co-founders" />
-          <label htmlFor="looking-for-co-founders">Looking for Co-founders</label>
-          <Checkbox id="looking-for-job" /> 
-          <label htmlFor="looking-for-job">Looking for Job🥀</label>
-        </div> */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProfiles.map((profile) => (
-            <ProfileCard key={profile.id} {...profile} />
-          ))}
-        </div>
-
-        {filteredProfiles.length === 0 && (
+        {!isSearching && filteredProfiles.length === 0 && (
           <div className="text-center py-12">
             <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">No profiles found</h3>
