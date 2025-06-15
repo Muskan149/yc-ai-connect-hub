@@ -43,6 +43,7 @@ const AttendeeForm = () => {
   const [newInterest, setNewInterest] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [acceptanceEmailPreview, setAcceptanceEmailPreview] = useState<string | null>(null);
+  // const [resumePreview, setResumePreview] = useState<string | null>(null);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -398,6 +399,42 @@ const AttendeeForm = () => {
                 {/* <p className="text-sm text-gray-500 mt-1">
                 </p> */}
               </div>
+
+              {/* Resume PDF Upload
+              <div>
+                <Label htmlFor="resume" className="text-sm font-medium text-gray-700">
+                  Resume
+                </Label>
+                <div className="mt-2 flex items-center gap-4">
+                  <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center">
+                    {resumePreview ? (
+                      <img src={resumePreview} alt="Resume preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <Upload className="w-8 h-8 text-gray-400" />
+                    )}  
+                  </div>
+                  <div className="flex-1">
+                    <Input
+                      type="file"
+                      accept="application/pdf"
+                      onChange={handleResumeChange}
+                      className="hidden"
+                      id="resume"
+                    />
+                    <Label
+                      htmlFor="resume"
+                      className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload Resume
+                    </Label>
+                    <p className="text-sm text-gray-500 mt-3">
+                      Upload a resume (max 5MB, PDF only)
+                    </p>
+                  </div>
+                </div>
+              </div> */}
+
 
               {/* Interests */}
               <div>

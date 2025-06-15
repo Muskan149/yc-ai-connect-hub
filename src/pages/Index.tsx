@@ -175,7 +175,7 @@ const Index = () => {
               <div className="relative shadow-lg rounded-xl">
                 <Input
                   type="text"
-                  placeholder="Try: 'Agents' or 'Based in San Francisco' or 'Stanford CS'"
+                  placeholder="Try: 'Agents' or 'Based in San Francisco' or 'Georgia Tech CS'"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -216,7 +216,7 @@ const Index = () => {
             </Button>
           )}
         </div>
-        
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProfiles.map((profile) => (
               <ProfileCard key={profile.id} {...profile} />
