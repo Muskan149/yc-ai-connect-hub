@@ -42,8 +42,8 @@ const Index = () => {
   const handleSearch = async () => {
     if (!searchQuery.trim()) {
         // setIsSearching(false);
-      setSearchQuery("");
-      setFilteredProfiles(profiles);
+      // setSearchQuery("");
+      // setFilteredProfiles(profiles);
       // setFilteredAdvancedProfiles([]);
       return;
     }
@@ -198,7 +198,7 @@ const Index = () => {
           <h2 className="text-2xl font-semibold text-gray-900">
             {searchQuery && isSearching ? `Search Results (${filteredProfiles.length})` : `All Profiles`}
           </h2>
-          {searchQuery && isSearching && (
+          {isSearching && (
             <Button 
               variant="outline" 
               onClick={() => {
