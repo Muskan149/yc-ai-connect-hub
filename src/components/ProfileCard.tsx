@@ -84,19 +84,26 @@ export const ProfileCard = (profile : ProfileCardProps) => {
             </div>
           </div>
 
+
           {/* Looking For and Support Container */}
+          
           <div className="space-y-3">
+            
             {/* Looking For */}
-            <div className="flex items-start">
-              <Search className="w-4 h-4 mr-2 mt-0.5 text-yc-orange" />
-              <p className="text-sm text-gray-700 line-clamp-3">{profile.lookingFor}</p>
-            </div>
+            {profile.lookingFor && (
+              <div className="flex items-start">
+                <Search className="w-4 h-4 mr-2 mt-0.5 text-yc-orange" />
+                <p className="text-sm text-gray-700 line-clamp-3">{profile.lookingFor}</p>
+              </div>
+            )}
 
             {/* Support */}
-            <div className="flex items-start">
-              <HandHeart className="w-4 h-4 mr-2 mt-0.5 text-yc-orange" />
-              <p className="text-sm text-gray-700 line-clamp-3">{profile.support}</p>
-            </div>
+            {profile.support && (
+              <div className="flex items-start">
+                <HandHeart className="w-4 h-4 mr-2 mt-0.5 text-yc-orange" />
+                <p className="text-sm text-gray-700 line-clamp-3">{profile.support}</p>
+              </div>
+            )}
           </div>
         </div>
 
