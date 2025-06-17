@@ -547,7 +547,7 @@ const AttendeeForm = () => {
 
                 <div>
                   <Label htmlFor="portfolio" className="text-sm font-medium text-gray-700">
-                    Portfolio / Website
+                    Github /Portfolio Website
                   </Label>
                   <Input
                     id="portfolio"
