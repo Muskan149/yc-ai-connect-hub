@@ -280,7 +280,7 @@ const AttendeeForm = () => {
               <div>
                 <div className="flex items-center gap-2">
                   <Label className="text-sm font-medium text-gray-700">
-                    Upload Acceptance Email Screenshot *
+                    Upload Badge Image/Acceptance Email Screenshot *
                   </Label>
                   <TooltipProvider>
                     <Tooltip>
